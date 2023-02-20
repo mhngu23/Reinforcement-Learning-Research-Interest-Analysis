@@ -39,12 +39,15 @@ def text_preprocessor(sentence):
     wpt = nltk.WordPunctTokenizer()
     stop_words = stopwords.words('english')
     lemmatizer = WordNetLemmatizer()
+    redundant_words = ["deep", "reinforcement", "learning", "portfolio", "optimization", "management"]
 
     sentence = sentence.lower() # Convert text to lower case
 
     sentence = re.sub('[^A-Za-z0-9]+', ' ', sentence) # Remove special characters
 
     sentence = ' '.join(char for char in sentence.split() if char not in stop_words)  # Remove un-needed stopwords
+
+    sentence = ' '.join(char for char in sentence.split() if char not in redundant_words)  # Remove un-needed stopwords
 
     sentence = re.sub(r"'<.*?>'", "", sentence) # Remove tag
 
@@ -61,8 +64,10 @@ def dataframe_preprocessor(df):
     index_list = list(range(1, df.shape[0]+1))
     df.index = index_list
 
+    df["citations_by_years"] = df["citations"]/(2023 - df["year"] + 1)
+
     df = df.drop_duplicates(subset=['title'], keep='first')
-    print(df)
+
     df['processed_title'] = df['title'].apply(lambda x: text_preprocessor(x))
 
     return df
@@ -73,6 +78,8 @@ if __name__=="__main__":
     raw_df = csv_data_into_df_reader()
 
     preprocessed_df = dataframe_preprocessor(raw_df)
+
+    preprocessed_df.to_csv(PATH + f'\\preprocessed_df.csv')
 
     print("----------------------------------------------------------")
     print(f"The number of articles are {str(preprocessed_df.shape[0])}")

@@ -41,6 +41,6 @@ def output_file(df):
 
         # f = open(PATH + f'processed_clusters\\cluster\\{str(cluster)}.csv', 'w') # create csv file
 
-        data = clusters.get_group(cluster)[['title', 'citations', 'year']] # get title 
+        data = clusters.get_group(cluster)[['title', 'citations', 'year', 'citations_by_years']] # get title 
 
         data.to_csv(PATH + f'processed_clusters\\{str(cluster)}.csv')

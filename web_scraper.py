@@ -27,6 +27,7 @@ def scraper_api(query, n_pages, since_year):
     ---------------------------"""
 
     pages = np.arange(0,(n_pages*10),1)
+    print(pages)
     for page in pages:
         time.sleep(120)
         papers = []
@@ -82,15 +83,15 @@ def scraper_api(query, n_pages, since_year):
                 new_url = "no citations"
             # appends everything in a list of dictionaries    
             papers.append({'title': title, 'year': year, 'citations': citations, 'cited_by_url': new_url})
-            print(papers)
+            # print(papers)
         papers_df = pd.DataFrame(papers)
-        config_page = int(page/10)+25
-        papers_df.to_csv(f'../data/raw_data_{config_page}.csv', index = True)
+        config_page = int(page/10)+35
+        papers_df.to_csv(f'data/raw_data_{config_page}.csv', index = True)
     # converts the list of dict to a pandas df
     
     return papers_df
 
-scraper_api("reinforcement+learning+portfolio+optimization", 100, 2020)
+scraper_api("reinforcement+learning+trading", 100, 2019)
 
 
 
